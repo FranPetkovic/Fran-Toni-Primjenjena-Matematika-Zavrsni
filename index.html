@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Stranica za kladenje</title>
+</head>
+<body>
+
+        <div class="dice">
+            <ol class="die-list even-roll" data-roll="1" id="die-1">
+            <li class="die-item" data-side="1">
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="2">
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="3">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="4">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="5">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="6">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            </ol>
+            <ol class="die-list odd-roll" data-roll="1" id="die-2">
+            <li class="die-item" data-side="1">
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="2">
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="3">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="4">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="5">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="6">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            </ol>
+            <ol class="die-list odd-roll" data-roll="1" id="die-4">
+            <li class="die-item" data-side="1">
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="2">
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="3">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="4">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="5">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            <li class="die-item" data-side="6">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </li>
+            </ol>
+        </div>
+        <div class="gumbi">
+            <button type="button" id="roll-button">Baci kocke</button>
+            <button class="dodajIgraca">Dodaj igraca</button>
+        </div>
+
+
+        <div class="listaKorisnika">
+
+            <div class="korisnik" id="korisnik1">
+                <h2>Igrac 1</h2>
+                <p class="stanje">Trenutno stanje: 1000</p>
+                <p>Ulog:</p>
+                <input class="ulog" type="number" min="0">
+                <p>Odabrani broj:</p>
+                <input class="broj" type="number" max="6" min="1">
+            </div>
+            
+        </div>
+
+    <script>
+        let brojIgraca=1
+        function rollDice() {
+            const dice = [...document.querySelectorAll(".die-list")];
+            let brojevi = []
+            dice.forEach(die => {
+                toggleClasses(die);
+                let random = getRandomNumber(1, 6)
+                die.dataset.roll = random;
+                brojevi.push(random)
+            });
+            for(let i = 1; i<=brojIgraca; i++){
+                let stanje = document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML.substring(16)
+                let ulog = document.getElementsByClassName("ulog")[i-1].value
+                let broj = document.getElementsByClassName("broj")[i-1].value
+                
+                let brojPogodenih = 0
+                for(let j = 0; j<3; j++){
+                    if(brojevi[j] == broj){
+                        brojPogodenih++
+                    }
+                }
+
+                if(brojPogodenih == 0){
+                    document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-ulog)
+                }
+                else if(brojPogodenih == 1){
+                    document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-(-ulog))
+                }
+                else if(brojPogodenih == 2){
+                    document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-(-ulog*2))
+                }
+                else if(brojPogodenih == 3){
+                    document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-(-ulog*3))
+                }
+                
+            }
+        }
+        
+        function dodajIgraca() {
+            brojIgraca++
+            let listaKorisnika=document.querySelector(".listaKorisnika")
+            listaKorisnika.innerHTML+="<div class='korisnik' id='korisnik"+ brojIgraca +"'><h2>Igrac "+brojIgraca+"</h2><p class='stanje'>Trenutno stanje: 1000</p><p>Ulog:</p><input class='ulog' type='number' min='0'><p>Odabrani broj:</p><input class='broj' type='number' max='6' min='1'></div>"
+        }
+
+        function toggleClasses(die) {
+        die.classList.toggle("odd-roll");
+        die.classList.toggle("even-roll");
+        }
+
+        function getRandomNumber(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        document.getElementById("roll-button").addEventListener("click", rollDice);
+        document.querySelector(".dodajIgraca").addEventListener("click", dodajIgraca);
+
+    </script>
+</body>
+</html>
