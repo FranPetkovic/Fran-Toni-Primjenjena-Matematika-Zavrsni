@@ -138,6 +138,7 @@
     <script>
         let brojIgraca=1
         function rollDice() {
+            document.getElementById("roll-button").disabled = true;
             const dice = [...document.querySelectorAll(".die-list")];
             let brojevi = []
             dice.forEach(die => {
@@ -146,10 +147,23 @@
                 die.dataset.roll = random;
                 brojevi.push(random)
             });
+            
             for(let i = 1; i<=brojIgraca; i++){
+
+                
+
                 let stanje = document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML.substring(16)
                 let ulog = document.getElementsByClassName("ulog")[i-1].value
                 let broj = document.getElementsByClassName("broj")[i-1].value
+                
+                
+                ulog = Math.abs(ulog)
+
+                if(broj > 6 || broj < 1 || ulog > stanje || stanje == null || broj == null){
+                    //alert("Doslo je do greske")
+                    continue;
+                }
+
                 
                 let brojPogodenih = 0
                 for(let j = 0; j<3; j++){
@@ -158,20 +172,45 @@
                     }
                 }
 
-                if(brojPogodenih == 0){
+                const timer = setTimeout(function(){promjeniStanje(brojPogodenih, i, stanje, ulog)}, 1350);
+
+
+            }
+            
+           // document.getElementById("roll-button").disabled = false;
+
+        }
+
+        function promjeniStanje(brojPogodenih, i, stanje, ulog){
+            //alert(stanje + " " + ulog)
+            novoStanje = 0;
+            if(brojPogodenih == 0){
                     document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-ulog)
+                    novoStanje = stanje - ulog
+                    document.getElementById("roll-button").disabled = false;
                 }
                 else if(brojPogodenih == 1){
                     document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-(-ulog))
+                    novoStanje = (stanje-(-ulog))
+                    document.getElementById("roll-button").disabled = false;
                 }
                 else if(brojPogodenih == 2){
                     document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-(-ulog*2))
+                    novoStanje = (stanje-(-ulog*2))
+                    document.getElementById("roll-button").disabled = false;
                 }
                 else if(brojPogodenih == 3){
                     document.getElementById("korisnik" + i).getElementsByClassName("stanje")[0].innerHTML = "Trenutno stanje: " + (stanje-(-ulog*3))
+                    novoStanje = (stanje-(-ulog*3))
+                    document.getElementById("roll-button").disabled = false;
+                }
+                if(ulog > novoStanje || novoStanje == null || broj == null){
+
+                    document.getElementById("korisnik" + i).style.backgroundColor = "red"
+                    document.getElementById("korisnik" + i).style.opacity = 0.7
                 }
                 
-            }
+                
         }
         
         function dodajIgraca() {
